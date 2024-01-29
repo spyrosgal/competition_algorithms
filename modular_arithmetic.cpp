@@ -98,7 +98,7 @@ mint factorial(int n) {
 }
 
 mint choose(int n, int k) {
-	if (k < n) return 0;
+	if (k > n) return 0;
 	else {
 		mint num = factorial(n);
 		mint den = factorial(k) * factorial(n-k);
