@@ -2,6 +2,7 @@
 #include <tuple>
 #include <queue>
 #include <algorithm>
+#include <climits>
 #include "graph_algorithms.h"
 
 using namespace std;

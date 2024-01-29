@@ -39,58 +39,69 @@ long long mod_inverse(int base, int mod) {
 	return mod_pow(base, phi(mod) - 1, mod);
 }
 
-long long factorial(int n, int mod) {
-	long long res = 1;
+class mint {
+public:
+	static int mod;
+	long long val;
+ 
+	mint(long long v) {
+		val = v % mod;
+	}
+ 
+	static mint pw(mint a, int b);
+	static mint inv(mint a);
+ 
+	friend mint operator + (const mint& x, const mint& y) {
+		return mint((x.val + y.val) % mod);
+	}
+ 
+	friend mint operator - (const mint& x, const mint& y) {
+		return (x.val >= y.val) ? x.val - y.val : ((mod + x.val - y.val) % mod);
+	}
+ 
+	friend mint operator * (const mint& x, const mint& y) {
+		return mint((x.val * y.val) % mod);
+	}
+ 
+	friend mint operator /(const mint& x, const mint& y) {
+		return mint(x.val * inv(y.val));
+	}
+
+	friend ostream& operator<<(ostream& os, const mint& x) {
+		os << x.val;
+		return os;
+	}
+
+};
+ 
+mint mint::pw(mint a, int b) {
+	if(!b) return 1;
+	mint t = pw(a, b / 2);
+	t = t * t;
+	if(b % 2) t = t * mint(a);
+	return t;
+}
+ 
+mint mint::inv(mint a) {
+	return mint::pw(a, mod - 2);
+}
+ 
+int mint::mod = 999999893;
+
+mint factorial(int n) {
+	mint res = 1;
 	for (int i = 1; i <= n; i++) {
-		res *= (long long)i;
-		res %= mod;
+		res = res * i;
 	}
 
 	return res;
 }
 
-long long choose(long long n, long long k, int mod) {
+mint choose(int n, int k) {
 	if (k < n) return 0;
 	else {
-		long long num = factorial(n, mod);
-		long long den = factorial(k, mod) * factorial(n-k, mod) %mod;
-		den = mod_inverse(den, mod);
-		return num * den % mod;
+		mint num = factorial(n);
+		mint den = factorial(k) * factorial(n-k);
+		return num / den;
 	}
-}
-
-class mint {
-public:
-	static int mod;
-	long long val;
-
-	mint(long long v) {
-		val = v;
-	}
-
-	friend mint operator + (const mint& x, const mint& y) {
-		return mint((x.val + y.val) % mod);
-	}
-
-	friend mint operator - (const mint& x, const mint& y) {
-		if (x.val >= y.val) {
-			return mint((x.val - y.val) % mod);
-		}
-		else {
-			if ((y.val - x.val) % mod == 0) return mint(0);
-			else return mint(mod - (y.val - x.val) % mod);
-		}
-	}
-
-	friend mint operator * (const mint& x, const mint& y) {
-		return mint((x.val * y.val) % mod);
-	}
-
-	friend mint operator /(const mint& x, const mint& y) {
-		return mint(x.val * mod_inverse(y.val, mod));
-	}
-};
-
-int main() {
-	return 0;
 }
