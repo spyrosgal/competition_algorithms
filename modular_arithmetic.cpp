@@ -43,6 +43,10 @@ class mint {
 public:
 	static int mod;
 	long long val;
+
+	mint() {
+		val = 0;
+	}
  
 	mint(long long v) {
 		val = v % mod;
